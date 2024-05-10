@@ -105,6 +105,8 @@ app.get("/info", (req, res) => {
 
 const PORT = process.env.PORT || 3001;
 
+app.use(express.static("dist"));
+
 app.listen(PORT, () => {
     console.log("Server is running on port 3001");
 });
