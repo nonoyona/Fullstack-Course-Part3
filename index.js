@@ -1,6 +1,8 @@
 const express = require("express");
 
 const app = express();
+app.use(express.json())
+
 
 let data = [
     { 
@@ -50,11 +52,32 @@ app.delete("/api/persons/:id", (req, res) => {
     res.status(204).end();
 });
 
+app.post("/api/persons", (req, res) => {
+    const body = req.body;
+    console.log("Called POST with body:", body);
+    if (!body || !body.name || !body.number) {
+        return res.status(400).json({ message: "Name or number is missing" });
+    }
+    if (data.find(person => person.name === body.name)) {
+        return res.status(400).json({ message: "Name must be unique" });
+    }
+    let id = Math.floor(Math.random() * 1000000)+1;
+    const person = {
+        id: id,
+        name: body.name,
+        number: body.number
+    };
+    data = data.concat(person);
+    res.json(person);
+});
+
 
 app.get("/info", (req, res) => {
     const date = new Date();
     res.send(`<p>Phonebook has info for ${data.length} people</p><p>${date}</p>`);
 });
+
+
 
 app.listen(3001, () => {
     console.log("Server is running on port 3001");
