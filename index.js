@@ -41,6 +41,15 @@ app.get("/api/persons/:id", (req, res) => {
     }
 });
 
+app.delete("/api/persons/:id", (req, res) => {
+    const id = Number(req.params.id);
+    if (!data.find(person => person.id === id)) {
+        return res.status(404).json({ message: "Person not found" });
+    }
+    data = data.filter(person => person.id !== id);
+    res.status(204).end();
+});
+
 
 app.get("/info", (req, res) => {
     const date = new Date();
