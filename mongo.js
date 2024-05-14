@@ -34,7 +34,7 @@ const addEntry = (name, number) => {
         number
     });
 
-    entry.save().then(result => {
+    entry.save().then(() => {
         console.log(`added ${name} number ${number} to phonebook`);
         mongoose.connection.close();
     });

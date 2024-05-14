@@ -6,7 +6,7 @@ const PhonebookEntry = require("./database");
 const app = express();
 
 
-morgan.token("body", (req, res) => {
+morgan.token("body", (req) => {
     if (req.method === "POST") {
         return JSON.stringify(req.body);
     } else {
@@ -28,7 +28,7 @@ app.get("/api/persons", (req, res, next) => {
 
 app.get("/api/persons/:id", (req, res, next) => {
     const id = req.params.id;
-    const entry = PhonebookEntry.findById(id).then(entry => {
+    PhonebookEntry.findById(id).then(entry => {
         if (entry) {
             res.json(entry);
         } else {
@@ -51,7 +51,7 @@ app.post("/api/persons", (req, res, next) => {
         return res.status(400).json({ message: "Name or number is missing" });
     }
 
-    const query = PhonebookEntry.findOne({ name: body.name }).then(entry => {
+    PhonebookEntry.findOne({ name: body.name }).then(entry => {
         if (entry) {
             return res.status(400).json({ message: "Name must be unique" });
         }
@@ -100,7 +100,7 @@ app.get("/info", (req, res) => {
 
 });
 
-const errorHandler = (error, req, res, next) => {
+const errorHandler = (error, req, res) => {
     console.error(error.message, "(", error.name, ")");
     if (error.name === "CastError") {
         return res.status(400).end();
