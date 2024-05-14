@@ -107,9 +107,6 @@ const errorHandler = (error, req, res, next) => {
     } else if (error.name === "ValidationError") {
         return res.status(400).json({
             message: error.message,
-            kind: error.errors.name.kind,
-            path: error.errors.name.path,
-            value: error.errors.name.value
         });
     } else {
         return res.status(500).end();

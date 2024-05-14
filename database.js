@@ -19,7 +19,28 @@ const phonebookEntrySchema = new mongoose.Schema({
         required: true,
         minLength: 3
     },
-    number: String
+    number: {
+        type: String,
+        required: true,
+        validate: {
+            validator: (number) => {
+                let parts = number.split('-');
+                if (parts.length != 2) {
+                    return false;
+                }
+                let areaCode = parts[0];
+                let numberPart = parts[1];
+                if (areaCode.length < 2 || areaCode.length > 3) {
+                    return false;
+                }
+                if ((numberPart.length + areaCode.length) < 8) {
+                    return false;
+                }
+                return true;
+            },
+            message: props => `${props.value} is not a valid phone number`
+        }
+    }
 });
 
 phonebookEntrySchema.set('toJSON', {
